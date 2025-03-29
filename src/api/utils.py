@@ -1,9 +1,13 @@
+import asyncio
+
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
 
 from src.api.const.contacts import contacts
 from src.database.db import get_db
+from src.services.email_service import send_email
 
 router = APIRouter(prefix="/utils", tags=["utils"])
 
@@ -33,3 +37,7 @@ async def run_seeder(db: AsyncSession = Depends(get_db)):
         db.add_all(contacts)
         await db.commit()
         return {"message": "Database seeded successfully!"}
+
+@router.get("/email-test")
+async def test_email():
+    await send_email(email = "salden.com@gmail.com", username="Salden", host="234.234.342.342")

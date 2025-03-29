@@ -1,3 +1,4 @@
+from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from libgravatar import Gravatar
@@ -25,6 +26,8 @@ class UserService:
     async def get_user_by_username(self, username: str):
         return await self.repository.get_user_by_username(username)
 
-    async def get_user_by_email(self, email: str):
+    async def get_user_by_email(self, email: EmailStr):
         return await self.repository.get_user_by_email(email)
 
+    async def confirmed_email(self, email: EmailStr):
+        return await self.repository.confirmed_email(email)

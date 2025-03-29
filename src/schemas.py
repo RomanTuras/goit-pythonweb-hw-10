@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Optional
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, EmailStr
 
 
 class ContactBase(BaseModel):
@@ -27,16 +27,19 @@ class ContactResponse(ContactBase):
 class User(BaseModel):
     id: int
     username: str
-    email: str
+    email: EmailStr
     avatar: str
 
     model_config = ConfigDict(from_attributes=True, str_strip_whitespace=True)
 
 class UserCreate(BaseModel):
     username: str
-    email: str
+    email: EmailStr
     password: str
 
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+class RequestEmail(BaseModel):
+    email: EmailStr

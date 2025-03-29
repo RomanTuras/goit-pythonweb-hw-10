@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import Depends, HTTPException, status
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from jose import JWTError, jwt
 
 from src.database.db import get_db
@@ -20,7 +20,7 @@ class Hash:
     def get_password_hash(self, password: str):
         return self.pwd_context.hash(password)
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 # define a function to generate a new access token
 async def create_access_token(data: dict, expires_delta: Optional[int] = None):
@@ -36,7 +36,7 @@ async def create_access_token(data: dict, expires_delta: Optional[int] = None):
     return encoded_jwt
 
 async def get_current_user(
-    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+    token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -60,3 +60,23 @@ async def get_current_user(
         raise credentials_exception
     return user
 
+async def get_email_from_token(token: str):
+    try:
+        payload = jwt.decode(
+            token, config.JWT_SECRET, algorithms=[config.JWT_ALGORITHM]
+        )
+        email = payload["sub"]
+        return email
+    except JWTError as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Token incorrect",
+        )
+
+
+def create_email_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.now(UTC) + timedelta(days=7)
+    to_encode.update({"iat": datetime.now(UTC), "exp": expire})
+    token = jwt.encode(to_encode, config.JWT_SECRET, algorithm=config.JWT_ALGORITHM)
+    return token
