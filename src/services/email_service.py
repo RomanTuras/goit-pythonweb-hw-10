@@ -16,7 +16,7 @@ async def send_email(email: str, username: str, host: URL):
     message = MIMEMultipart()
     message["From"] = settings.MAIL_FROM
     message["To"] = email
-    message["Subject"] = "Ваша заявка прийнята."
+    message["Subject"] = "Confirm email"
 
     token_verification = create_email_token({"sub": email})
 
