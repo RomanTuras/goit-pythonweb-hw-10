@@ -89,9 +89,9 @@ async def request_email(
     user = await user_service.get_user_by_email(body.email)
 
     if user.confirmed:
-        return {"message": "Ваша електронна пошта вже підтверджена"}
+        return {"message": "Email already confirmed"}
     if user:
         background_tasks.add_task(
             send_email, user.email, user.username, request.base_url
         )
-    return {"message": "Перевірте свою електронну пошту для підтвердження"}
+    return {"message": "Check your email for confirm registration"}
