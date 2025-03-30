@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import Integer, String, func, ForeignKey, Column, Boolean
 from sqlalchemy.orm import mapped_column, Mapped, DeclarativeBase, relationship
