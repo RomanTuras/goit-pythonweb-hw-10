@@ -11,6 +11,7 @@ from src.database.db import get_db
 from src.conf.config import settings
 from src.services.users import UserService
 
+
 class Hash:
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -20,7 +21,9 @@ class Hash:
     def get_password_hash(self, password: str):
         return self.pwd_context.hash(password)
 
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+
 
 # define a function to generate a new access token
 async def create_access_token(data: dict, expires_delta: Optional[int] = None):
@@ -34,6 +37,7 @@ async def create_access_token(data: dict, expires_delta: Optional[int] = None):
         to_encode, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM
     )
     return encoded_jwt
+
 
 async def get_current_user(
     token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
@@ -52,13 +56,14 @@ async def get_current_user(
         username = payload["sub"]
         if username is None:
             raise credentials_exception
-    except JWTError as e:
+    except JWTError:
         raise credentials_exception
     user_service = UserService(db)
     user = await user_service.get_user_by_username(username)
     if user is None:
         raise credentials_exception
     return user
+
 
 async def get_email_from_token(token: str):
     try:
@@ -67,7 +72,7 @@ async def get_email_from_token(token: str):
         )
         email = payload["sub"]
         return email
-    except JWTError as e:
+    except JWTError:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Token incorrect",

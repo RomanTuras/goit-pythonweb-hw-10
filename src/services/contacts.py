@@ -13,7 +13,9 @@ class ContactService:
     async def create_contact(self, body: ContactBase, user: User) -> Contact:
         return await self.contact_repository.create_contact(body, user)
 
-    async def get_contacts(self, skip: int, limit: int, user: User, q: str | None = None) -> Sequence[Contact]:
+    async def get_contacts(
+        self, skip: int, limit: int, user: User, q: str | None = None
+    ) -> Sequence[Contact]:
         return await self.contact_repository.get_contacts(skip, limit, user, q)
 
     async def get_contact(self, contact_id: int, user: User) -> Contact:
@@ -22,7 +24,9 @@ class ContactService:
     async def remove_contact_by_id(self, contact_id: int, user: User) -> Contact:
         return await self.contact_repository.remove_contact(contact_id, user)
 
-    async def update_contact(self, contact_id: int, body: ContactBase, user: User) -> Contact | None:
+    async def update_contact(
+        self, contact_id: int, body: ContactBase, user: User
+    ) -> Contact | None:
         return await self.contact_repository.update_contact(contact_id, body, user)
 
     async def birthday_reminder(self, user: User) -> Sequence[Contact]:

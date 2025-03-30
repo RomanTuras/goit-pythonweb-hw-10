@@ -7,6 +7,7 @@ from src.database.db import get_db
 
 router = APIRouter(prefix="/utils", tags=["utils"])
 
+
 @router.get("/healthchecker")
 async def healthchecker(db: AsyncSession = Depends(get_db)):
     try:
@@ -25,6 +26,7 @@ async def healthchecker(db: AsyncSession = Depends(get_db)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error connecting to the database",
         )
+
 
 # To comment after seeder working out
 @router.get("/start-seeder")

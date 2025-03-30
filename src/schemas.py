@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 
 
@@ -10,6 +10,7 @@ class ContactBase(BaseModel):
     phone: str = Field(max_length=50)
     birth_date: datetime
     additional: str = Field(max_length=250)
+
 
 class ContactResponse(ContactBase):
     id: int
@@ -24,6 +25,7 @@ class ContactResponse(ContactBase):
 
     model_config = ConfigDict(from_attributes=True, str_strip_whitespace=True)
 
+
 class User(BaseModel):
     id: int
     username: str
@@ -32,14 +34,17 @@ class User(BaseModel):
 
     model_config = ConfigDict(from_attributes=True, str_strip_whitespace=True)
 
+
 class UserCreate(BaseModel):
     username: str
     email: EmailStr
     password: str
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
+
 
 class RequestEmail(BaseModel):
     email: EmailStr

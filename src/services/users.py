@@ -6,6 +6,7 @@ from libgravatar import Gravatar
 from src.repository.users import UserRepository
 from src.schemas import UserCreate
 
+
 class UserService:
     def __init__(self, db: AsyncSession):
         self.repository = UserRepository(db)
@@ -31,3 +32,6 @@ class UserService:
 
     async def confirmed_email(self, email: EmailStr):
         return await self.repository.confirmed_email(email)
+
+    async def update_avatar_url(self, email: EmailStr, url: str):
+        return await self.repository.update_avatar_url(email, url)

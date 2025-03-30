@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks, Request
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from src.schemas import UserCreate, Token, User, RequestEmail
 from src.services.auth import create_access_token, Hash, get_email_from_token
@@ -9,6 +8,7 @@ from src.services.users import UserService
 from src.database.db import get_db
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+
 
 # Register the User
 @router.post("/register", response_model=User, status_code=status.HTTP_201_CREATED)

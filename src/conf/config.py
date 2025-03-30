@@ -2,6 +2,7 @@ from pydantic import EmailStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 
+
 class Settings(BaseSettings):
     MAIL_USERNAME: Optional[EmailStr] = None
     MAIL_PASSWORD: Optional[str] = None
@@ -13,9 +14,13 @@ class Settings(BaseSettings):
     JWT_SECRET: Optional[str] = None
     JWT_ALGORITHM: Optional[str] = None
     JWT_EXPIRATION_SECONDS: Optional[int] = None
+    CLOUDINARY_NAME: Optional[str] = None
+    CLOUDINARY_API_KEY: Optional[int] = None
+    CLOUDINARY_API_SECRET: Optional[str] = None
 
     model_config = SettingsConfigDict(
         extra="ignore", env_file=".env", env_file_encoding="utf-8", case_sensitive=True
     )
+
 
 settings = Settings()
